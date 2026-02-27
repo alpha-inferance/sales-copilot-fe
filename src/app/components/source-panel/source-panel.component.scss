@@ -1,0 +1,97 @@
+
+$azure:         #0078D4;
+$azure-light:   #EFF6FC;
+$success:       #107C10;
+$success-light: #DFF6DD;
+$warning:       #FF8C00;
+$gray-200:      #EDEBE9;
+$gray-400:      #A19F9D;
+$gray-500:      #797775;
+$gray-800:      #252423;
+$card-bdr:      #E1EEF8;
+
+.sp-wrap {
+  width: 230px; min-width: 230px;
+  background: #fff; border-left: 1px solid $gray-200;
+  display: flex; flex-direction: column;
+  height: 100%; font-family: 'Segoe UI','Inter',sans-serif;
+}
+
+.sp-header {
+  padding: 11px 13px; border-bottom: 1px solid $gray-200;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
+
+  .sp-title { font-size: 12px; font-weight: 700; color: $gray-800; }
+  .sp-sub   { font-size: 10px; color: $gray-400; }
+  .sp-close {
+    background: none; border: none; font-size: 14px;
+    color: $gray-400; cursor: pointer;
+    &:hover { color: $azure; }
+  }
+}
+
+.sp-list {
+  flex: 1; overflow-y: auto;
+  padding: 10px 11px; display: flex; flex-direction: column; gap: 9px;
+}
+
+.sp-card {
+  border: 1px solid $card-bdr; border-radius: 10px;
+  padding: 11px; background: #FAFAFb;
+
+  .sp-doc-title {
+    font-size: 11px; font-weight: 700; color: $gray-800;
+    line-height: 1.3; margin-bottom: 6px;
+  }
+  .sp-row {
+    display: flex; justify-content: space-between;
+    align-items: center; margin-bottom: 4px;
+  }
+  .sp-year { font-size: 10px; color: $gray-400; }
+  .sp-page { font-size: 10px; color: $gray-400; margin-bottom: 8px; }
+
+  .badge {
+    font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 16px;
+    &.case-study { background: $success-light; color: $success; }
+    &.proposal   { background: $azure-light;   color: $azure;   }
+    &.whitepaper { background: #F4ECF7;         color: #5C2D91;  }
+    &.pitch-deck { background: #E0F6FD;         color: #0EA5E9;  }
+  }
+}
+
+.conf-wrap {
+  margin-bottom: 9px;
+  .conf-labels {
+    display: flex; justify-content: space-between; margin-bottom: 3px;
+    font-size: 10px; color: $gray-500;
+  }
+  .conf-pct { font-weight: 700;
+    &.high { color: $success; }
+    &.mid  { color: $warning; }
+  }
+  .conf-track {
+    background: #EDEBE9; border-radius: 4px; height: 4px;
+  }
+  .conf-fill {
+    height: 4px; border-radius: 4px; transition: width .5s;
+    &.high { background: $success; }
+    &.mid  { background: $warning; }
+  }
+}
+
+.open-btn {
+  width: 100%; font-size: 11px; padding: 6px 0;
+  border: 1px solid $azure; border-radius: 6px;
+  color: $azure; background: $azure-light; cursor: pointer; font-weight: 600;
+  transition: all .2s;
+  &:hover { background: $azure; color: #fff; }
+}
+
+.sp-footer {
+  padding: 9px 11px; flex-shrink: 0;
+  border-top: 1px solid $gray-200; background: #DFF6DD;
+
+  .sp-grounded { font-size: 11px; font-weight: 600; color: $success; }
+  .sp-risk     { font-size: 10px; color: $success; opacity: .8; }
+}

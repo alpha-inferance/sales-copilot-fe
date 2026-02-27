@@ -1,0 +1,70 @@
+
+<!-- src/app/components/source-panel/source-panel.component.html -->
+
+<div class="sp-wrap">
+
+    <!-- Header -->
+    <div class="sp-header">
+      <div>
+        <div class="sp-title">Sources</div>
+        <div class="sp-sub">{{ msg?.citations?.length }} documents retrieved</div>
+      </div>
+      <button class="sp-close" (click)="chat.setSourceMsg(null)">✕</button>
+    </div>
+  
+    <!-- Source cards -->
+    <div class="sp-list">
+      @for (ci of msg?.citations; track ci.title) {
+        <div class="sp-card">
+          <div class="sp-doc-title">{{ ci.title }}</div>
+          <div class="sp-row">
+            <span class="badge"
+                  [class.case-study]="ci.type === 'Case Study'"
+                  [class.proposal]="ci.type === 'Proposal'"
+                  [class.whitepaper]="ci.type === 'Whitepaper'"
+                  [class.pitch-deck]="ci.type === 'Pitch Deck'">
+              {{ ci.type }}
+            </span>
+            <span class="sp-year">{{ ci.year }}</span>
+          </div>
+          <div class="sp-page">{{ ci.page }}</div>
+  
+          <!-- Confidence bar -->
+          <div class="conf-wrap">
+            <div class="conf-labels">
+              <span>Confidence</span>
+              <span class="conf-pct"
+                    [class.high]="ci.confidence >= 80"
+                    [class.mid]="ci.confidence < 80">{{ ci.confidence }}%</span>
+            </div>
+            <div class="conf-track">
+              <div class="conf-fill"
+                   [style.width.%]="ci.confidence"
+                   [class.high]="ci.confidence >= 80"
+                   [class.mid]="ci.confidence < 80"></div>
+            </div>
+          </div>
+  
+          <button class="open-btn">Open Document ↗</button>
+        </div>
+      }
+    </div>
+  
+    <!-- Footer -->
+    <div class="sp-footer">
+      <div class="sp-grounded">✓ All claims grounded in corpus</div>
+      <div class="sp-risk">Hallucination risk: Low</div>
+    </div>
+  
+  </div>
+  
+  
+  <!--
+  ══════════════════════════════════════════════════════════════
+  src/app/components/source-panel/source-panel.component.scss
+  ══════════════════════════════════════════════════════════════
+  -->
+  <style>
+  /* NOTE: Angular does not read <style> tags in HTML templates.
+     Copy everything below into source-panel.component.scss       */
+  </style>

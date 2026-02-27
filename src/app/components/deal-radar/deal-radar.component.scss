@@ -1,0 +1,175 @@
+// src/app/components/deal-radar/deal-radar.component.scss
+
+$azure:         #0078D4;
+$azure-light:   #EFF6FC;
+$success:       #107C10;
+$success-light: #DFF6DD;
+$warning:       #FF8C00;
+$warning-light: #FFF4CE;
+$danger:        #D13438;
+$danger-light:  #FDE7E9;
+$gray-100:      #F3F3F3;
+$gray-200:      #EDEBE9;
+$gray-300:      #D2D0CE;
+$gray-400:      #A19F9D;
+$gray-500:      #797775;
+$gray-700:      #3B3A39;
+$gray-800:      #252423;
+$card-bdr:      #E1EEF8;
+
+@mixin score-colors($c, $bg) {
+  .score-circle.#{$c},
+  .sh-circle.#{$c}   { background: rgba($bg,.15); border-color: $bg; color: $bg;
+                        .sh-num,.sh-lbl { color: $bg; } }
+  .score-hero.#{$c}  { background: rgba($bg,.05); border-color: rgba($bg,.2); }
+  .sh-fill.#{$c}     { background: $bg; }
+  .sh-pct.#{$c}      { color: $bg; }
+  .match-badge.#{$c} { background: rgba($bg,.15); color: $bg; }
+  .deal-item.active.#{$c} { border-left-color: $bg; background: rgba($bg,.06); .di-name { color: $bg; } }
+}
+
+@include score-colors('high', $success);
+@include score-colors('mid',  $warning);
+@include score-colors('low',  $danger);
+
+.dr-wrap {
+  display: flex; flex-direction: column; height: 100vh;
+  font-family: 'Segoe UI','Inter',sans-serif; background: #FAFAFb;
+}
+
+/* Header */
+.dr-header {
+  background: $azure; padding: 11px 20px;
+  display: flex; align-items: center; gap: 12px; flex-shrink: 0;
+
+  .back-btn {
+    background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.3);
+    border-radius: 6px; padding: 5px 12px; color: #fff;
+    font-size: 12px; font-weight: 600; cursor: pointer;
+    &:hover { background: rgba(255,255,255,.25); }
+  }
+  .dr-titles { flex: 1; }
+  .dr-title   { font-size: 14px; font-weight: 700; color: #fff; }
+  .dr-sub     { font-size: 11px; color: rgba(255,255,255,.75); }
+  .add-btn {
+    background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.3);
+    border-radius: 6px; padding: 5px 14px; color: #fff;
+    font-size: 12px; font-weight: 600; cursor: pointer;
+  }
+}
+
+/* Body */
+.dr-body {
+  flex: 1; display: flex; overflow: hidden;
+}
+
+/* Deal list */
+.deal-list {
+  width: 252px; min-width: 252px;
+  background: #fff; border-right: 1px solid $gray-200;
+  display: flex; flex-direction: column; overflow-y: auto;
+}
+.list-hdr {
+  padding: 10px 14px; border-bottom: 1px solid $gray-100;
+  font-size: 11px; font-weight: 700; color: $gray-500; flex-shrink: 0;
+}
+
+.deal-item {
+  padding: 13px 16px; border-bottom: 1px solid $gray-100;
+  cursor: pointer; border-left: 3px solid transparent; transition: all .15s;
+  &:hover:not(.active) { background: #FAFAFb; }
+
+  .di-top  { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
+  .di-name { font-size: 13px; font-weight: 700; color: $gray-800; flex: 1; margin-right: 8px; }
+  .di-meta { font-size: 11px; color: $gray-500; margin-bottom: 5px; }
+  .di-tags { display: flex; gap: 4px; flex-wrap: wrap; }
+  .tag     { font-size: 9px; padding: 1px 6px; border-radius: 10px;
+             background: $gray-100; color: $gray-500; font-weight: 600; }
+
+  .score-circle {
+    width: 38px; height: 38px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 800; flex-shrink: 0; border: 2px solid;
+  }
+}
+
+/* Deal detail */
+.deal-detail {
+  flex: 1; overflow-y: auto; padding: 22px; display: flex; flex-direction: column; gap: 18px;
+}
+
+/* Score hero */
+.score-hero {
+  border-radius: 14px; padding: 18px 22px;
+  display: flex; align-items: center; gap: 18px;
+  border-width: 1.5px; border-style: solid;
+
+  .sh-circle {
+    width: 72px; height: 72px; border-radius: 50%; border: 3px solid;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; flex-shrink: 0;
+    .sh-num { font-size: 24px; font-weight: 800; line-height: 1; }
+    .sh-lbl { font-size: 9px;  font-weight: 700; }
+  }
+  .sh-info { flex: 1;
+    .sh-name { font-size: 18px; font-weight: 700; color: $gray-800; margin-bottom: 2px; }
+    .sh-meta { font-size: 12px; color: $gray-500; margin-bottom: 8px; }
+  }
+  .match-badge {
+    font-size: 11px; padding: 3px 12px; border-radius: 16px; font-weight: 700;
+  }
+  .sh-bar-wrap { width: 170px;
+    .sh-bar-labels { display: flex; justify-content: space-between; margin-bottom: 3px; font-size: 10px; color: $gray-500; }
+    .sh-pct { font-weight: 700; }
+    .sh-track { background: $gray-200; border-radius: 4px; height: 5px; }
+    .sh-fill  { height: 5px; border-radius: 4px; transition: width .5s; }
+    .sh-bar-sub { display: flex; justify-content: space-between; font-size: 9px; color: $gray-400; margin-top: 2px; }
+  }
+}
+
+/* Docs */
+.docs-section {
+  .docs-title { font-size: 13px; font-weight: 700; color: $gray-800; margin-bottom: 9px; }
+}
+.doc-row {
+  background: #fff; border: 1px solid $card-bdr;
+  border-radius: 9px; padding: 11px 16px;
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 7px; box-shadow: 0 1px 4px rgba(0,0,0,.04);
+
+  .doc-icon { font-size: 18px; }
+  .doc-name { flex: 1; font-size: 12px; font-weight: 600; color: $gray-800; }
+  .doc-btns { display: flex; gap: 6px; flex-shrink: 0; }
+  .preview-btn {
+    font-size: 11px; padding: 4px 11px;
+    border: 1px solid $azure; border-radius: 6px;
+    color: $azure; background: $azure-light; cursor: pointer; font-weight: 600;
+  }
+  .use-btn {
+    font-size: 11px; padding: 4px 11px;
+    border: none; border-radius: 6px;
+    color: #fff; background: $azure; cursor: pointer; font-weight: 600;
+    &:hover { background: darken($azure, 6%); }
+  }
+}
+
+/* Pitch brief */
+.brief-card {
+  background: linear-gradient(135deg, $azure-light, #fff);
+  border: 1.5px solid rgba($azure,.3); border-radius: 12px; padding: 18px;
+
+  .brief-hdr   { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .brief-title { font-size: 13px; font-weight: 700; color: $azure; }
+  .ai-badge    { font-size: 10px; padding: 2px 8px; border-radius: 10px;
+                 background: $azure; color: #fff; font-weight: 700; margin-left: auto; }
+  .brief-text  { font-size: 13px; color: $gray-700; line-height: 1.8; margin: 0 0 14px; }
+  .brief-btns  { display: flex; gap: 8px; }
+  .copy-btn {
+    padding: 8px 16px; background: $azure; color: #fff;
+    border: none; border-radius: 7px; font-size: 12px; font-weight: 700; cursor: pointer;
+  }
+  .chat-btn {
+    padding: 8px 16px; background: #fff; color: $azure;
+    border: 1.5px solid $azure; border-radius: 7px; font-size: 12px; font-weight: 700; cursor: pointer;
+  }
+}

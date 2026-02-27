@@ -1,0 +1,218 @@
+// src/app/components/chat/chat.component.scss
+
+$azure:         #0078D4;
+$azure-light:   #EFF6FC;
+$success:       #107C10;
+$success-light: #DFF6DD;
+$warning:       #FF8C00;
+$danger:        #D13438;
+$gray-100:      #F3F3F3;
+$gray-200:      #EDEBE9;
+$gray-300:      #D2D0CE;
+$gray-400:      #A19F9D;
+$gray-500:      #797775;
+$gray-600:      #605E5C;
+$gray-700:      #3B3A39;
+$gray-800:      #252423;
+$card-bdr:      #E1EEF8;
+
+.chat-wrap {
+  display: flex; flex-direction: column;
+  height: 100vh; background: #FAFAFb;
+  font-family: 'Segoe UI','Inter',sans-serif;
+  overflow: hidden;
+}
+
+/* ── Top bar ───────────────────────────────────────────────── */
+.chat-topbar {
+  background: #fff; border-bottom: 1px solid $gray-200;
+  padding: 10px 20px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: space-between;
+
+  .topbar-left { flex: 1; min-width: 0; }
+  .conv-title  { font-size: 13px; font-weight: 700; color: $gray-800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .conv-sub    { font-size: 10px; color: $gray-400; }
+  .topbar-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+
+  .btn-upgrade {
+    background: $azure-light; color: $azure;
+    border: 1px solid rgba($azure,.35); border-radius: 6px;
+    padding: 4px 12px; font-size: 11px; font-weight: 600; cursor: pointer;
+  }
+  .btn-ghost {
+    background: none; border: 1px solid $gray-300; border-radius: 6px;
+    padding: 4px 10px; font-size: 11px; color: $gray-500; cursor: pointer;
+  }
+  .icon-btn { background: none; border: none; font-size: 15px; color: $gray-400; cursor: pointer; }
+}
+
+/* ── Guardrail banner ─────────────────────────────────────── */
+.guardrail-banner {
+  border-bottom-width: 1px; border-bottom-style: solid;
+  padding: 7px 20px; flex-shrink: 0;
+  display: flex; align-items: center; gap: 8px;
+
+  .banner-icon  { font-size: 14px; }
+  .banner-msg   { font-size: 12px; font-weight: 600; flex: 1; }
+  .banner-close { background: none; border: none; cursor: pointer; font-size: 16px; }
+}
+
+/* ── Body ─────────────────────────────────────────────────── */
+.chat-body {
+  flex: 1; display: flex; overflow: hidden;
+}
+
+/* ── Messages pane ────────────────────────────────────────── */
+.messages-pane {
+  flex: 1; overflow-y: auto;
+  padding: 20px 24px;
+  display: flex; flex-direction: column; gap: 18px;
+}
+
+/* User */
+.msg-user {
+  display: flex; flex-direction: column; align-items: flex-end;
+
+  .bubble-user {
+    max-width: 68%; background: $azure; color: #fff;
+    padding: 10px 16px; border-radius: 14px 4px 14px 14px;
+    font-size: 13px; line-height: 1.65;
+    box-shadow: 0 2px 10px rgba($azure,.28);
+  }
+  .msg-time { font-size: 10px; color: $gray-400; margin-top: 3px; }
+}
+
+/* Bot row */
+.msg-bot {
+  display: flex; gap: 10px; align-items: flex-start;
+
+  .bot-avatar {
+    width: 30px; height: 30px; border-radius: 8px;
+    background: $azure; display: flex; align-items: center;
+    justify-content: center; font-size: 14px; flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba($azure,.28);
+  }
+}
+
+.bot-content { flex: 1; max-width: 78%; display: flex; flex-direction: column; gap: 8px; }
+
+/* Bot bubble */
+.bubble-bot {
+  background: #fff; border: 1px solid $card-bdr;
+  padding: 12px 16px; border-radius: 4px 14px 14px 14px;
+  font-size: 13px; line-height: 1.75; color: $gray-700;
+  box-shadow: 0 1px 5px rgba(0,0,0,.05);
+
+  &.guardrail-bdr { border-left: 3px solid $danger; }
+  &.oos-bdr       { border-left: 3px solid $warning; }
+
+  .guardrail-tag {
+    font-size: 12px; font-weight: 700; margin-bottom: 7px;
+    display: flex; align-items: center; gap: 5px;
+    &.danger  { color: $danger; }
+    &.warning { color: $warning; }
+  }
+}
+
+/* Typing */
+.typing-bubble {
+  background: #fff; border: 1px solid $card-bdr;
+  padding: 10px 14px; border-radius: 4px 12px 12px 12px;
+  display: flex; align-items: center; gap: 5px;
+
+  .dot {
+    width: 7px; height: 7px; border-radius: 50%; background: $azure;
+    animation: dp 1.2s ease infinite;
+    &.d2 { animation-delay: .22s; }
+    &.d3 { animation-delay: .44s; }
+  }
+  .typing-lbl { font-size: 11px; color: $gray-400; margin-left: 4px; }
+}
+@keyframes dp {
+  0%,80%,100% { opacity:.3; transform:scale(.8); }
+  40%          { opacity:1;  transform:scale(1.2); }
+}
+
+/* Citations */
+.citations {
+  .cit-label {
+    font-size: 10px; font-weight: 700; color: $gray-400;
+    text-transform: uppercase; letter-spacing: .06em; margin-bottom: 5px;
+  }
+  .cit-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .cit-chip {
+    background: #fff; border: 1px solid $card-bdr;
+    border-radius: 7px; padding: 5px 10px;
+    display: flex; align-items: center; gap: 6px;
+    cursor: pointer; font-size: 11px;
+    transition: border-color .15s;
+    &:hover { border-color: $azure; }
+    .cit-title { font-weight: 600; color: $gray-600; }
+    .cit-conf  { font-weight: 700;
+      &.high { color: $success; }
+      &.mid  { color: $warning; }
+    }
+  }
+}
+
+/* Follow-ups */
+.followups {
+  display: flex; gap: 6px; flex-wrap: wrap; align-items: center;
+  .fu-lbl  { font-size: 10px; color: $gray-400; flex-shrink: 0; }
+  .fu-chip {
+    font-size: 11px; padding: 4px 11px; border-radius: 16px;
+    border: 1px solid rgba($azure,.35); color: $azure; background: $azure-light;
+    cursor: pointer; transition: all .15s; line-height: 1.3;
+    &:hover { background: $azure; color: #fff; border-color: $azure; }
+  }
+}
+
+/* Feedback row */
+.feedback-row {
+  display: flex; gap: 8px; align-items: center;
+  .fb-btn {
+    background: none; border: 1px solid $gray-300;
+    border-radius: 5px; padding: 2px 9px;
+    font-size: 11px; color: $gray-400; cursor: pointer;
+    transition: all .15s;
+    &.sel { background: $azure-light; border-color: $azure; color: $azure; }
+  }
+  .fb-sep    { font-size: 10px; color: $gray-300; }
+  .grounded  { font-size: 11px; color: $success; }
+  .no-src    { font-size: 11px; color: $warning; }
+}
+
+/* ── Input area ───────────────────────────────────────────── */
+.input-area {
+  padding: 10px 20px 14px;
+  background: #fff; border-top: 1px solid $gray-200; flex-shrink: 0;
+
+  .input-box {
+    display: flex; gap: 8px; align-items: flex-end;
+    background: #FAFAFb; border: 1.5px solid $gray-300;
+    border-radius: 10px; padding: 10px 12px;
+    transition: border-color .2s;
+    &.focused { border-color: $azure; }
+  }
+  .chat-ta {
+    flex: 1; border: none; outline: none;
+    background: transparent; font-size: 13px; color: $gray-800;
+    resize: none; line-height: 1.5; max-height: 80px; overflow-y: auto;
+    font-family: inherit;
+    &::placeholder { color: $gray-400; }
+  }
+  .input-tools { display: flex; gap: 6px; align-items: flex-end; flex-shrink: 0; }
+  .tool-btn {
+    width: 30px; height: 30px; border-radius: 7px;
+    background: $gray-100; border: none; font-size: 14px; cursor: pointer;
+    &:hover { background: $azure-light; }
+  }
+  .send-btn {
+    width: 32px; height: 32px; border-radius: 7px;
+    background: $gray-300; border: none; color: #fff;
+    font-size: 15px; cursor: not-allowed; transition: background .2s;
+    display: flex; align-items: center; justify-content: center;
+    &.active { background: $azure; cursor: pointer; }
+  }
+  .input-hint { font-size: 10px; color: $gray-400; text-align: center; margin: 5px 0 0; }
+}

@@ -1,0 +1,105 @@
+<!-- src/app/components/deal-radar/deal-radar.component.html -->
+
+<div class="dr-wrap">
+
+  <!-- Header -->
+  <div class="dr-header">
+    <button class="back-btn" (click)="chat.navigateTo('chat')">← Back</button>
+    <div class="dr-titles">
+      <div class="dr-title">⚡ Deal Radar</div>
+      <div class="dr-sub">Proactive knowledge matching for active prospects</div>
+    </div>
+    <button class="add-btn">+ Add Prospect</button>
+  </div>
+
+  <!-- Body -->
+  <div class="dr-body">
+
+    <!-- Deal List -->
+    <div class="deal-list">
+      <div class="list-hdr">ACTIVE DEALS ({{ deals.length }})</div>
+
+      @for (d of deals; track d.name; let i = $index) {
+        <div class="deal-item" [class]="scoreClass(d.score)"
+             [class.active]="selIndex() === i"
+             (click)="selIndex.set(i)">
+          <div class="di-top">
+            <div class="di-name">{{ d.name }}</div>
+            <div class="score-circle" [class]="scoreClass(d.score)">{{ d.score }}</div>
+          </div>
+          <div class="di-meta">{{ d.industry }} · {{ d.size }}</div>
+          <div class="di-tags">
+            @for (t of d.tags; track t) {
+              <span class="tag">{{ t }}</span>
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Deal Detail -->
+    @if (deal) {
+      <div class="deal-detail">
+
+        <!-- Score Hero -->
+        <div class="score-hero" [class]="scoreClass(deal.score)">
+          <div class="sh-circle" [class]="scoreClass(deal.score)">
+            <div class="sh-num">{{ deal.score }}</div>
+            <div class="sh-lbl">MATCH</div>
+          </div>
+          <div class="sh-info">
+            <div class="sh-name">{{ deal.name }}</div>
+            <div class="sh-meta">{{ deal.industry }} · {{ deal.size }}</div>
+            <span class="match-badge" [class]="scoreClass(deal.score)">{{ matchLabel(deal.score) }}</span>
+          </div>
+          <div class="sh-bar-wrap">
+            <div class="sh-bar-labels">
+              <span>Confidence</span>
+              <span class="sh-pct" [class]="scoreClass(deal.score)">{{ deal.score }}%</span>
+            </div>
+            <div class="sh-track">
+              <div class="sh-fill" [class]="scoreClass(deal.score)" [style.width.%]="deal.score"></div>
+            </div>
+            <div class="sh-bar-sub"><span>No Match</span><span>Perfect</span></div>
+          </div>
+        </div>
+
+        <!-- Matched Documents -->
+        <div class="docs-section">
+          <div class="docs-title">📄 Best Matching Documents</div>
+          @for (doc of deal.docs; track doc) {
+            <div class="doc-row">
+              <span class="doc-icon">📄</span>
+              <span class="doc-name">{{ doc }}</span>
+              <div class="doc-btns">
+                <button class="preview-btn">Preview</button>
+                <button class="use-btn" (click)="chat.startConversation('Tell me about: ' + doc)">
+                  Use in Chat →
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- Pitch Brief -->
+        <div class="brief-card">
+          <div class="brief-hdr">
+            <span>🚀</span>
+            <span class="brief-title">Auto-Generated Pitch Brief</span>
+            <span class="ai-badge">AI</span>
+          </div>
+          <p class="brief-text">{{ deal.brief }}</p>
+          <div class="brief-btns">
+            <button class="copy-btn">📋 Copy Pitch Brief</button>
+            <button class="chat-btn" (click)="chat.startConversation(deal.brief)">
+              💬 Open in Chat
+            </button>
+          </div>
+        </div>
+
+      </div>
+    }
+
+  </div><!-- /dr-body -->
+
+</div>
