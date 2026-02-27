@@ -8,15 +8,8 @@
         <div class="conv-title">{{ activeTitle }}</div>
         <div class="conv-sub">Searching: Proposals · Case Studies · Whitepapers · Pitch Decks</div>
       </div>
-      <div class="topbar-right">
-        <button class="btn-upgrade">⬆ Upgrade Plan</button>
-        <button class="btn-ghost">🕐 History</button>
-        <button class="icon-btn">🔗</button>
-        <button class="icon-btn">✉</button>
-        <button class="icon-btn">🔔</button>
-      </div>
     </div>
-  
+
     <!-- Guardrail Banner -->
     @if (chat.banner(); as b) {
       <div class="guardrail-banner"
@@ -27,15 +20,15 @@
         <button class="banner-close" [style.color]="b.color" (click)="chat.clearBanner()">✕</button>
       </div>
     }
-  
+
     <!-- Body: Messages + Source Panel -->
     <div class="chat-body">
-  
+
       <!-- Messages -->
       <div class="messages-pane">
-  
+
         @for (msg of chat.messages(); track trackMsg($index, msg)) {
-  
+
           <!-- USER bubble -->
           @if (msg.role === 'user') {
             <div class="msg-user">
@@ -43,30 +36,49 @@
               <div class="msg-time">Just now</div>
             </div>
           }
-  
+
           <!-- ASSISTANT bubble -->
           @if (msg.role === 'assistant') {
             <div class="msg-bot">
               <div class="bot-avatar">🧭</div>
               <div class="bot-content">
-  
-                <!-- Text bubble -->
+
+                <!-- Text bubble — streaming variant shows a blinking cursor -->
                 <div class="bubble-bot"
                      [class.guardrail-bdr]="msg.kind === 'guardrail_input'"
-                     [class.oos-bdr]="msg.kind === 'guardrail_oos'">
-  
+                     [class.oos-bdr]="msg.kind === 'guardrail_oos'"
+                     [class.streaming-bubble]="msg.streaming">
+
                   @if (msg.kind === 'guardrail_input') {
                     <div class="guardrail-tag danger">🚫 Off-topic query blocked</div>
                   }
                   @if (msg.kind === 'guardrail_oos') {
                     <div class="guardrail-tag warning">⚠️ No matching content in corpus</div>
                   }
-  
+
                   <span [innerHTML]="renderMd(msg.text)"></span>
+                  @if (msg.streaming) {
+                    <span class="stream-cursor">▌</span>
+                  }
                 </div>
-  
-                <!-- Citations -->
-                @if (msg.citations?.length) {
+
+                <!-- Sources (from WebSocket stream_end) — only when done -->
+                @if (!msg.streaming && msg.sources?.length) {
+                  <div class="citations">
+                    <div class="cit-label">Sources Used</div>
+                    <div class="cit-chips">
+                      @for (src of msg.sources; track src) {
+                        <div class="cit-chip">
+                          <span>📄</span>
+                          <span class="cit-title">{{ src }}</span>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                }
+
+                <!-- Legacy citations (from mock / HTTP path) -->
+                @if (!msg.streaming && msg.citations?.length) {
                   <div class="citations">
                     <div class="cit-label">Sources Used</div>
                     <div class="cit-chips">
@@ -81,9 +93,9 @@
                     </div>
                   </div>
                 }
-  
-                <!-- Follow-up chips -->
-                @if (msg.followUps?.length) {
+
+                <!-- Follow-up chips — hide while streaming -->
+                @if (!msg.streaming && msg.followUps?.length) {
                   <div class="followups">
                     <span class="fu-lbl">Follow up:</span>
                     @for (fu of msg.followUps; track fu) {
@@ -91,29 +103,31 @@
                     }
                   </div>
                 }
-  
-                <!-- Feedback row -->
-                <div class="feedback-row">
-                  <button class="fb-btn" [class.sel]="feedback[msg.id] === 'helpful'"
-                          (click)="onFeedback(msg, 'helpful')">👍 Helpful</button>
-                  <button class="fb-btn" [class.sel]="feedback[msg.id] === 'not_helpful'"
-                          (click)="onFeedback(msg, 'not_helpful')">👎 Not helpful</button>
-                  <span class="fb-sep">|</span>
-                  @if (msg.citations?.length) {
-                    <span class="grounded">✓ Corpus-grounded</span>
-                  } @else if (msg.kind === 'answer') {
-                    <span class="no-src">⚠ No sources found</span>
-                  }
-                </div>
-  
+
+                <!-- Feedback row — hide while streaming -->
+                @if (!msg.streaming) {
+                  <div class="feedback-row">
+                    <button class="fb-btn" [class.sel]="feedback[msg.id] === 'helpful'"
+                            (click)="onFeedback(msg, 'helpful')">👍 Helpful</button>
+                    <button class="fb-btn" [class.sel]="feedback[msg.id] === 'not_helpful'"
+                            (click)="onFeedback(msg, 'not_helpful')">👎 Not helpful</button>
+                    <span class="fb-sep">|</span>
+                    @if (msg.sources?.length || msg.citations?.length) {
+                      <span class="grounded">✓ Corpus-grounded</span>
+                    } @else if (msg.kind === 'answer') {
+                      <span class="no-src">⚠ No sources found</span>
+                    }
+                  </div>
+                }
+
               </div>
             </div>
           }
-  
+
         }
-  
-        <!-- Typing indicator -->
-        @if (chat.typing()) {
+
+        <!-- Typing indicator — only shown while waiting for stream_start (dots) -->
+        @if (chat.typing() && !chat.isStreaming()) {
           <div class="msg-bot">
             <div class="bot-avatar">🧭</div>
             <div class="typing-bubble">
@@ -124,17 +138,17 @@
             </div>
           </div>
         }
-  
+
         <div #msgBottom></div>
       </div><!-- /messages-pane -->
-  
+
       <!-- Source Panel (conditional) -->
       @if (chat.sourceMsg()) {
         <app-source-panel />
       }
-  
+
     </div><!-- /chat-body -->
-  
+
     <!-- Input Area -->
     <div class="input-area">
       <div class="input-box" [class.focused]="focused">
@@ -150,11 +164,11 @@
         <div class="input-tools">
           <button class="tool-btn" title="Attach">📎</button>
           <button class="send-btn"
-                  [class.active]="inputText.trim() && !chat.typing()"
+                  [class.active]="inputText.trim() && !isBusy"
                   (click)="onSend()">▶</button>
         </div>
       </div>
       <p class="input-hint">Enter to send · Shift+Enter for new line · All answers are source-cited</p>
     </div>
-  
+
   </div>

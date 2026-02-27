@@ -2,7 +2,6 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ChatService } from '../../services/chat.service_tst';
-import { MockDataService } from '../../services/mock-data.service';
 
 @Component({
   selector: 'app-welcome',
@@ -13,13 +12,13 @@ import { MockDataService } from '../../services/mock-data.service';
   <!-- Topbar -->
   <div class="topbar">
     <div class="topbar-title">Sales Co-Pilot</div>
-    <div class="topbar-actions">
+    <!-- <div class="topbar-actions">
       <button class="btn-upgrade">⬆ Upgrade Plan</button>
       <button class="btn-ghost">🕐 History</button>
       <button class="icon-btn">🔗</button>
       <button class="icon-btn">✉</button>
       <button class="icon-btn">🔔</button>
-    </div>
+    </div> -->
   </div>
 
   <!-- Body -->
@@ -55,7 +54,7 @@ import { MockDataService } from '../../services/mock-data.service';
     <div class="templates-section">
       <h2 class="templates-title">Find Your Template Queries</h2>
       <div class="templates-grid">
-        @for (t of mock.templates; track t.label) {
+        @for (t of chat.templates; track t.label) {
           <div class="template-card" (click)="chat.startConversation(t.label)">
             <div class="template-icon" [style.background]="t.iconBg">{{ t.icon }}</div>
             <p class="template-label">{{ t.label }}</p>
@@ -66,14 +65,14 @@ import { MockDataService } from '../../services/mock-data.service';
     </div>
 
     <!-- Stats -->
-    <div class="stats-row">
+    <!-- <div class="stats-row">
       @for (s of stats; track s.label) {
         <div class="stat-item">
           <div class="stat-value">{{ s.value }}</div>
           <div class="stat-label">{{ s.label }}</div>
         </div>
       }
-    </div>
+    </div> -->
   </div>
 </div>
   `,
@@ -81,15 +80,7 @@ import { MockDataService } from '../../services/mock-data.service';
 })
 export class WelcomeComponent {
   chat = inject(ChatService);
-  mock = inject(MockDataService);
   query = '';
-
-  stats = [
-    { value: '142', label: 'Documents Indexed' },
-    { value: '98%', label: 'Answer Accuracy' },
-    { value: '<3s', label: 'Avg Response' },
-    { value: '47', label: 'Past Proposals' },
-  ];
 
   submit() {
     if (this.query.trim()) this.chat.startConversation(this.query.trim());

@@ -114,6 +114,25 @@ $card-bdr:      #E1EEF8;
   }
 }
 
+/* Streaming bubble — subtle left border while tokens arrive */
+.streaming-bubble {
+  border-left: 3px solid $azure !important;
+}
+
+/* Blinking block cursor shown at the end of a streaming message */
+.stream-cursor {
+  display: inline-block;
+  color: $azure;
+  animation: blink-cursor .7s step-start infinite;
+  margin-left: 1px;
+  font-size: 14px;
+  line-height: 1;
+}
+@keyframes blink-cursor {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
 /* Typing */
 .typing-bubble {
   background: #fff; border: 1px solid $card-bdr;

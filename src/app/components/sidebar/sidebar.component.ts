@@ -1,8 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ChatService } from '../../services/chat.service_tst';
-import { MockDataService } from '../../services/mock-data.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -21,20 +20,20 @@ import { MockDataService } from '../../services/mock-data.service';
     <button class="btn-primary" (click)="chat.newConversation(); chat.navigateTo('chat')">
       + New Conversation
     </button>
-    <button class="btn-secondary" (click)="chat.navigateTo('dealradar')">
+    <!-- <button class="btn-secondary" (click)="chat.navigateTo('dealradar')">
       ⚡ Deal Radar
-    </button>
-    <button class="btn-outline">
+    </button> -->
+    <!-- <button class="btn-outline">
       📂 Import Document
-    </button>
+    </button> -->
   </div>
 
   <!-- Nav icons -->
-  <div class="nav-icons">
+  <!-- <div class="nav-icons">
     <button class="nav-icon" title="Refresh">⟳</button>
     <button class="nav-icon" title="Knowledge Base">📖</button>
     <button class="nav-icon" title="Integrations">🔗</button>
-  </div>
+  </div> -->
 
   <!-- Search -->
   <div class="sidebar-search">
@@ -46,18 +45,22 @@ import { MockDataService } from '../../services/mock-data.service';
   <!-- History Section -->
   <div class="sidebar-sections">
     <div class="section-header">📁 Recent Conversations</div>
+
     <div class="history-list">
-      @for (conv of filteredHistory; track conv.id) {
+      @for (conv of filteredHistory(); track conv.id) {
         <div class="history-item"
              [class.active]="chat.activeConvId() === conv.id"
              (click)="chat.setActiveConv(conv.id)">
           <div class="history-title">{{ conv.title }}</div>
-          <div class="history-meta">{{ conv.turns }} turns · {{ conv.time }}</div>
+          <div class="history-meta">{{ conv.message_count }} msgs · {{ conv.updated_at | date:'shortDate' }}</div>
         </div>
+      }
+      @empty {
+        <div class="history-item">No conversations found.</div>
       }
     </div>
 
-    <!-- Works -->
+    <!-- Works
     <div class="section-header collapsible" (click)="worksOpen = !worksOpen">
       📁 Works <span class="chevron">{{ worksOpen ? '∧' : '∨' }}</span>
     </div>
@@ -65,9 +68,9 @@ import { MockDataService } from '../../services/mock-data.service';
       @for (item of mock.workItems; track item) {
         <div class="section-item">{{ item }}</div>
       }
-    }
+    } -->
 
-    <!-- General -->
+    <!-- General
     <div class="section-header collapsible" (click)="generalOpen = !generalOpen">
       📁 General <span class="chevron">{{ generalOpen ? '∧' : '∨' }}</span>
     </div>
@@ -75,31 +78,31 @@ import { MockDataService } from '../../services/mock-data.service';
       @for (item of mock.generalItems; track item) {
         <div class="section-item">{{ item }}</div>
       }
-    }
+    } -->
 
     <!-- Corpus -->
-    <div class="section-header collapsible" (click)="corpusOpen = !corpusOpen">
+    <!-- <div class="section-header collapsible" (click)="corpusOpen = !corpusOpen">
       📁 Corpus <span class="chevron">{{ corpusOpen ? '∧' : '∨' }}</span>
     </div>
     @if (corpusOpen) {
       @for (item of mock.corpusItems; track item) {
         <div class="section-item">{{ item }}</div>
       }
-    }
+    } -->
   </div>
 
   <!-- Upgrade card -->
-  <div class="upgrade-card">
+  <!-- <div class="upgrade-card">
     <div class="upgrade-title">Pro Plan</div>
     <div class="upgrade-desc">Unlock unlimited queries, advanced analytics & Google Drive sync.</div>
     <button class="upgrade-btn">Upgrade to Pro</button>
-  </div>
+  </div> -->
 
   <!-- User -->
   <div class="sidebar-user">
     <div class="user-avatar">A</div>
     <div class="user-info">
-      <div class="user-name">Alex Kumar</div>
+      <div class="user-name">Sales</div>
       <div class="user-role">Account Manager</div>
     </div>
     <span class="user-settings">⚙</span>
@@ -110,16 +113,13 @@ import { MockDataService } from '../../services/mock-data.service';
 })
 export class SidebarComponent {
   chat = inject(ChatService);
-  mock = inject(MockDataService);
 
   searchQuery = '';
-  worksOpen = true;
-  generalOpen = false;
-  corpusOpen = false;
 
-  get filteredHistory() {
-    return this.mock.conversations.filter(c =>
+  filteredHistory = computed(() =>
+    this.chat.conversations().filter(c =>
+      c.id !== this.chat.activeConvId() &&
       c.title.toLowerCase().includes(this.searchQuery.toLowerCase())
-    );
-  }
+    )
+  );
 }
