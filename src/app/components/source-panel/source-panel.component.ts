@@ -4,7 +4,7 @@
 
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ChatService } from '../../services/chat.service';
+import { ChatService } from '../../services/chat.service_tst';
 
 @Component({
   selector: 'app-source-panel',

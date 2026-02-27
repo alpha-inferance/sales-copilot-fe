@@ -5,7 +5,7 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Deal } from '../../model/chat.models';
-import { ChatService } from '../../services/chat.service';
+import { ChatService } from '../../services/chat.service_tst';
 
 @Component({
   selector: 'app-deal-radar',
@@ -15,8 +15,8 @@ import { ChatService } from '../../services/chat.service';
   styleUrls: ['./deal-radar.component.scss'],
 })
 export class DealRadarComponent implements OnInit {
-//   chat = inject(ChatService);
-constructor(private chat: ChatService) { }
+
+chat = inject(ChatService);
 
 selIndex = signal(0);
 

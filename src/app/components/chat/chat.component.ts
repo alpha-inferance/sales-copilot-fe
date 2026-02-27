@@ -9,7 +9,7 @@ import {
   import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
   import { MockDataService } from '../../services/mock-data.service';
 import { SourcePanelComponent } from '../source-panel/source-panel.component';
-import { ChatService } from '../../services/chat.service';
+import { ChatService } from '../../services/chat.service_tst';
 import { Message } from '../../model/chat.models';
 
   

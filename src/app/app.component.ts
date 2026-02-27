@@ -4,7 +4,7 @@ import { SidebarComponent }   from './components/sidebar/sidebar.component';
 import { WelcomeComponent }   from './components/welcome/welcome.component';
 import { ChatComponent }      from './components/chat/chat.component';
 import { DealRadarComponent } from './components/deal-radar/deal-radar.component';
-import { ChatService }        from './services/chat.service';
+import { ChatService }        from './services/chat.service_tst';
 
 @Component({
   selector: 'app-root',

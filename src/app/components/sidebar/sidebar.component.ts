@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ChatService } from '../../services/chat.service';
+import { ChatService } from '../../services/chat.service_tst';
 import { MockDataService } from '../../services/mock-data.service';
 
 @Component({
