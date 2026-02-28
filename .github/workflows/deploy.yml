@@ -60,8 +60,8 @@ jobs:
           script: |
             echo ${{ secrets.REGISTRY_TOKEN }} | docker login registry.gitlab.com -u ${{ secrets.GITLAB_USERNAME }} --password-stdin
             cd ${{ secrets.PROJECT_DIR }}
-            sed -i 's/^IMAGE_TAG=.*/IMAGE_TAG=${{ steps.version.outputs.VERSION }}/' .env
-            grep -q '^GITLAB_PROJECT_PATH=' .env || echo 'GITLAB_PROJECT_PATH=${{ secrets.GITLAB_PROJECT_PATH }}' >> .env
-            sed -i 's|^GITLAB_PROJECT_PATH=.*|GITLAB_PROJECT_PATH=${{ secrets.GITLAB_PROJECT_PATH }}|' .env
+            sed -i 's/^BACKEND_IMAGE_TAG=.*/BACKEND_IMAGE_TAG=${{ steps.version.outputs.VERSION }}/' .env
+            grep -q '^GITLAB_FRONTEND_PROJECT_PATH=' .env || echo 'GITLAB_FRONTEND_PROJECT_PATH=${{ secrets.GITLAB_PROJECT_PATH }}' >> .env
+            sed -i 's|^GITLAB_FRONTEND_PROJECT_PATH=.*|GITLAB_FRONTEND_PROJECT_PATH=${{ secrets.GITLAB_PROJECT_PATH }}|' .env
             docker compose pull
             docker compose up -d
