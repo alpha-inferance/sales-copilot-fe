@@ -10,11 +10,12 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { ChatRequest, ChatResponse, Conversation, Deal } from '../model/chat.models';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
 
-  private readonly BASE_URL = 'http://localhost:8000';
+  private readonly BASE_URL = environment.apiBaseUrl;
 
   private get headers(): HttpHeaders {
     return new HttpHeaders({

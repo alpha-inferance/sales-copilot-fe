@@ -5,10 +5,11 @@
 
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({ providedIn: 'root' })
 export class WebSocketService {
-  private readonly WS_URL = 'ws://localhost:8000/ws';
+  private readonly WS_URL = `${environment.wsBaseUrl}/ws`;
 
   private ws: WebSocket | null = null;
   private pendingMessages: string[] = [];
